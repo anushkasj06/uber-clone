@@ -74,3 +74,61 @@ curl -X POST http://localhost:3000/users/register \
   "password": "password123"
 }'
 ```
+
+# User Login Endpoint
+
+## Endpoint: `/users/login`
+
+### Method: POST
+
+### Description:
+This endpoint is used to authenticate a user. It validates the input data, checks the user's credentials, and returns a JSON object containing an authentication token and the user details if the credentials are valid.
+
+### Request Body:
+The request body should be a JSON object with the following properties:
+- `email`: A string representing the user's email address (required, must be a valid email).
+- `password`: A string with a minimum length of 6 characters (required).
+
+
+Example:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+### Responses:
+
+#### Success (200):
+- **Description**: User authenticated successfully.
+- **Body**:
+  ```json
+  {
+    "token": "auth_token",
+    "user": {
+      "_id": "user_id",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+
+#### Client Error (400):
+- **Description**: Validation error or missing required fields.
+- **Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "parameter_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+        
