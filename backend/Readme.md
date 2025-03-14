@@ -364,4 +364,102 @@ This endpoint is used to log out the authenticated user by clearing the authenti
 curl -X GET http://localhost:3000/users/logout \
 -H "Authorization: Bearer auth_token"
 ```
-        
+
+# Captain Registration Endpoint
+
+## Endpoint: `/captains/register`
+
+### Method: POST
+
+### Description:
+This endpoint is used to register a new captain. It validates the input data, hashes the password, and creates a new captain in the database. Upon successful registration, it returns a JSON object containing an authentication token and the captain details.
+
+### Request Body:
+The request body should be a JSON object with the following properties:
+- `fullname`: An object containing:
+  - `firstname`: A string with a minimum length of 2 characters (required).
+  - `lastname`: A string with a minimum length of 2 characters (optional).
+- `email`: A string representing the captain's email address (required, must be a valid email).
+- `password`: A string with a minimum length of 6 characters (required).
+- `vehicle`: An object containing:
+  - `color`: A string with a minimum length of 3 characters (required).
+  - `plate`: A string with a minimum length of 3 characters (required).
+  - `capacity`: A number representing the vehicle's capacity (required, must be at least 1).
+  - `vehicleType`: A string representing the type of vehicle (required, must be one of 'car', 'motorcycle', 'auto').
+
+Example:
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+### Responses:
+
+#### Success (201):
+- **Description**: Captain registered successfully.
+- **Body**:
+  ```json
+  {
+    "token": "auth_token",
+    "captain": {
+      "_id": "captain_id",
+      "fullname": {
+        "firstname": "Jane",
+        "lastname": "Doe"
+      },
+      "email": "jane.doe@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "XYZ123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    }
+ }
+  ```
+
+#### Client Error (400):
+- **Description**: Validation error or missing required fields.
+- **Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "parameter_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X POST http://localhost:3000/captains/register \
+-H "Content-Type: application/json" \
+-d '{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}'
+```
